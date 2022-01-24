@@ -33,5 +33,8 @@ test-suite twentyone-test
   default-language: Haskell2010
   type:             exitcode-stdio-1.0
   hs-source-dirs:   test
-  main-is:          MyLibTest.hs
-  build-depends:    base ^>=4.14.3.0
+  main-is:          Test.hs
+  build-depends:
+    , base       ^>=4.14.3.0
+    , hspec      ^>=2.7.4
+    , twentyone
