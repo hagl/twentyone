@@ -8,15 +8,22 @@ category:           Game
 extra-source-files: CHANGELOG.md
 
 library
-  exposed-modules:  Domain
-  build-depends:    base ^>=4.14.3.0
+  exposed-modules:
+    Domain
+    Parser
+
+  build-depends:
+    , base        ^>=4.14.3.0
+    , megaparsec
+
   hs-source-dirs:   src
   default-language: Haskell2010
 
 executable twentyone
   main-is:          Main.hs
   build-depends:
-    , base       ^>=4.14.3.0
+    , base            ^>=4.14.3.0
+    , random-shuffle
     , twentyone
 
   hs-source-dirs:   app
