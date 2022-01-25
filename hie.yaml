@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:twentyone"
+
+    - path: "app/Main.hs"
+      component: "twentyone:exe:twentyone"
+
+    - path: "test"
+      component: "twentyone:test:twentyone-test"
