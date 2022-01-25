@@ -4,7 +4,7 @@ module Domain where
 
 import Data.List (intercalate)
 
-data Suit = Club | Diamonds | Hearts | Spades
+data Suit = Clubs | Diamonds | Hearts | Spades
   deriving (Eq, Ord, Enum, Show)
 
 displaySuit :: Suit -> String
