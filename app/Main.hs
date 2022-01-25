@@ -1,6 +1,6 @@
 module Main where
 
-import Domain (Card (Card), displayCards, displayGameResult, sortedDeck)
+import Domain (Card (Card), displayCards, displayGameResult, fullDeck)
 import Game (DeckError (..), play)
 import Parser
 import System.Environment
@@ -19,9 +19,9 @@ main = do
   a <- getArgs
   deck <-
     if null a
-      then shuffleM sortedDeck
+      then shuffleM fullDeck
       else readDeck (head a)
   case play deck of
-    Left DuplicateCards -> putStrLn "Input contains duplicate cards"
-    Left IncompleteDeck -> putStrLn "Input is not a complete deck of cards"
+    Left DuplicateCards -> putStrLn "Error: Input contains duplicate cards"
+    Left IncompleteDeck -> putStrLn "Error: Input is not a complete deck of cards"
     Right result -> putStrLn $ displayGameResult result

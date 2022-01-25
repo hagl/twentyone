@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 
-module Game (play, DeckError (..)) where
+module Game where
 
 import Data.Function ((&))
 import Data.Functor ((<&>))
@@ -58,7 +58,7 @@ data DeckError = DuplicateCards | IncompleteDeck
 play :: [Card] -> Either DeckError GameResult
 play deck
   | length (Set.fromList deck) < length deck = Left DuplicateCards
-  | length deck < length sortedDeck = Left IncompleteDeck
+  | length deck < length fullDeck = Left IncompleteDeck
   | otherwise = Right $ playGame deck
 
 playGame :: [Card] -> GameResult

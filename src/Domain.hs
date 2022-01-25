@@ -58,8 +58,8 @@ displayCards cards = intercalate ", " (map displayCard cards)
 cardValue :: Card -> Int
 cardValue (Card _ v) = value v
 
-sortedDeck :: [Card]
-sortedDeck = [Card s v | s <- [Clubs .. Spades], v <- [Two .. Ace]]
+fullDeck :: [Card]
+fullDeck = [Card s v | s <- [Clubs .. Spades], v <- [Two .. Ace]]
 
 data Participant = Sam | Dealer
   deriving (Eq, Ord, Show)
