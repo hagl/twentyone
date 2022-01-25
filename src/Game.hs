@@ -1,5 +1,5 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 
 module Game where
 
@@ -12,38 +12,36 @@ score :: [Card] -> Int
 score = sum . map cardValue
 
 resultWithWinner :: Participant -> GameState -> GameResult
-resultWithWinner p GameState {..} = GameResult {winner = p, cardsSam = handSam, cardsDealer = handDealer}
+resultWithWinner p GameState {..} = GameFinished {winner = p, cardsSam = handSam, cardsDealer = handDealer}
 
-dealCards :: GameState -> GameState
+dealCards :: GameState -> Either GameResult GameState
 dealCards GameState {deck = s1 : d1 : s2 : d2 : rest} =
-  GameState {handSam = [s1, s2], handDealer = [d1, d2], deck = rest}
+  Right GameState {handSam = [s1, s2], handDealer = [d1, d2], deck = rest}
+dealCards _ = Left NotEnoughCards
 
 checkInitialHands :: GameState -> Either GameResult GameState
 checkInitialHands state@GameState {..} =
   case (score handSam, score handDealer) of
     (21, _) -> Left $ resultWithWinner Sam state
     (_, 21) -> Left $ resultWithWinner Dealer state
-    (22, _) -> Left $ resultWithWinner Dealer state
-    (_, 22) -> Left $ resultWithWinner Sam state
+    (22, 22) -> Left $ resultWithWinner Dealer state
     _ -> Right state -- no winner yet
 
 -- take cards until score is over 17
-playSam :: GameState -> GameState
-playSam state@GameState {..} =
-  if score handSam >= 17
-    then state
-    else playSam $ state {handSam = handSam ++ [head deck], deck = tail deck}
+playSam :: GameState -> Either GameResult GameState
+playSam state@GameState {handSam} | score handSam >= 17 = Right state
+playSam state@GameState {handSam, deck = c : cs} = playSam $ state {handSam = handSam ++ [c], deck = cs}
+playSam _ = Left NotEnoughCards
 
 didSamLose :: GameState -> Either GameResult GameState
 didSamLose state =
   if score (handSam state) > 21 then Left $ resultWithWinner Dealer state else Right state
 
 -- take cards until score is over 17
-playDealer :: GameState -> GameState
-playDealer state@GameState {..} =
-  if score handDealer <= score handSam
-    then playDealer $ state {handDealer = handDealer ++ [head deck], deck = tail deck}
-    else state
+playDealer :: GameState -> Either GameResult GameState
+playDealer state@GameState {..} | score handDealer > score handSam = Right state
+playDealer state@GameState {handDealer, deck = c : cs} = playDealer $ state {handDealer = handDealer ++ [c], deck = cs}
+playDealer _ = Left NotEnoughCards
 
 finalResult :: Either GameResult GameState -> GameResult
 finalResult (Left result) = result
@@ -53,21 +51,13 @@ finalResult (Right state@GameState {..}) =
       winner = if scoreDealer <= 21 && scoreDealer > scoreSam || scoreSam > 21 then Dealer else Sam
    in resultWithWinner winner state
 
-data DeckError = DuplicateCards | IncompleteDeck
-
-play :: [Card] -> Either DeckError GameResult
-play deck
-  | length (Set.fromList deck) < length deck = Left DuplicateCards
-  | length deck < length fullDeck = Left IncompleteDeck
-  | otherwise = Right $ playGame deck
-
-playGame :: [Card] -> GameResult
-playGame deck =
+play :: [Card] -> GameResult
+play deck =
   let initialState = GameState {handSam = [], handDealer = [], deck = deck}
    in Right initialState
-        <&> dealCards
+        >>= dealCards
         >>= checkInitialHands
-        <&> playSam
+        >>= playSam
         >>= didSamLose
-        <&> playDealer
+        >>= playDealer
         & finalResult

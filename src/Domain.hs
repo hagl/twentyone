@@ -75,17 +75,20 @@ data GameState = GameState
   }
   deriving (Eq, Ord, Show)
 
-data GameResult = GameResult
-  { winner :: Participant,
-    cardsSam :: [Card],
-    cardsDealer :: [Card]
-  }
-  deriving (Eq, Ord, Show)
+data GameResult
+  = GameFinished
+      { winner :: Participant,
+        cardsSam :: [Card],
+        cardsDealer :: [Card]
+      }
+  | NotEnoughCards
+  deriving (Eq, Show)
 
 displayGameResult :: GameResult -> String
-displayGameResult GameResult {..} =
+displayGameResult GameFinished {..} =
   displayParticipant winner
     ++ "\nsam: "
     ++ displayCards cardsSam
     ++ "\ndealer: "
     ++ displayCards cardsDealer
+displayGameResult NotEnoughCards = "Error: There are not enough cards in the deck to finish the game"
