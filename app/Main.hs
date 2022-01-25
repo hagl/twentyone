@@ -1,6 +1,7 @@
 module Main where
 
-import Domain (Card (Card), displayCards, sortedDeck)
+import Domain (Card (Card), displayCards, displayGameResult, sortedDeck)
+import Game (DeckError (..), play)
 import Parser
 import System.Environment
 import System.Random.Shuffle
@@ -20,4 +21,7 @@ main = do
     if null a
       then shuffleM sortedDeck
       else readDeck (head a)
-  putStrLn $ displayCards deck
+  case play deck of
+    Left DuplicateCards -> putStrLn "Input contains duplicate cards"
+    Left IncompleteDeck -> putStrLn "Input is not a complete deck of cards"
+    Right result -> putStrLn $ displayGameResult result
