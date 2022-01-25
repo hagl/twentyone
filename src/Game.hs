@@ -4,8 +4,6 @@
 module Game where
 
 import Data.Function ((&))
-import Data.Functor ((<&>))
-import qualified Data.Set as Set
 import Domain
 
 -- | Plays a game of Twentyone with the given deck.

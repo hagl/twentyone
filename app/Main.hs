@@ -1,10 +1,10 @@
 module Main where
 
-import Domain (Card (Card), displayCards, displayGameResult, fullDeck)
+import Domain (Card, displayGameResult, fullDeck)
 import Game (play)
-import Parser
-import System.Environment
-import System.Random.Shuffle
+import Parser (parseInput)
+import System.Environment (getArgs)
+import System.Random.Shuffle (shuffleM)
 
 readDeck :: String -> IO [Card]
 readDeck filename = do
