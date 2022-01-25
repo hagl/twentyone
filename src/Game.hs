@@ -13,7 +13,10 @@ import Domain
 
   This is the main entry point into the Game module.
 --}
-play :: [Card] -> GameResult
+play ::
+  -- | The deck to be played
+  [Card] ->
+  GameResult
 play deck =
   let initialState = GameState {handSam = [], handDealer = [], deck = deck}
    in Right initialState

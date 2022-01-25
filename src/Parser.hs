@@ -40,8 +40,14 @@ cardParser :: Parser Card
 cardParser = Card <$> suitParser <*> valueParser
 
 cardsParser :: Parser [Card]
-cardsParser = sepBy cardParser (string ", ")
+cardsParser = sepBy cardParser $ string ", "
 
-parseInput :: String -> String -> Either String [Card]
-parseInput filename content =
-  first errorBundlePretty $ parse (cardsParser <* optional eol <* eof) filename content
+-- | Parses a string into a deck of cards
+parseInput ::
+  -- | Name of the source file
+  String ->
+  -- | Input to be parsed
+  String ->
+  Either String [Card]
+parseInput source input =
+  first errorBundlePretty $ parse (cardsParser <* optional eol <* eof) source input
