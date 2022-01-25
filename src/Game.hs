@@ -8,11 +8,8 @@ import Data.Functor ((<&>))
 import qualified Data.Set as Set
 import Domain
 
-{--|
-  Plays a game of Twentyone with the given deck.
-
-  This is the main entry point into the Game module.
---}
+-- | Plays a game of Twentyone with the given deck.
+-- This is the main entry point into the Game module.
 play ::
   -- | The deck to be played
   [Card] ->
