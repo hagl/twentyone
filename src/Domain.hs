@@ -8,7 +8,7 @@ data Suit = Clubs | Diamonds | Hearts | Spades
   deriving (Eq, Ord, Enum, Show)
 
 displaySuit :: Suit -> String
-displaySuit Club = "C"
+displaySuit Clubs = "C"
 displaySuit Diamonds = "D"
 displaySuit Hearts = "H"
 displaySuit Spades = "S"
@@ -59,7 +59,7 @@ cardValue :: Card -> Int
 cardValue (Card _ v) = value v
 
 sortedDeck :: [Card]
-sortedDeck = [Card s v | s <- [Club .. Spades], v <- [Two .. Ace]]
+sortedDeck = [Card s v | s <- [Clubs .. Spades], v <- [Two .. Ace]]
 
 data Participant = Sam | Dealer
   deriving (Eq, Ord, Show)

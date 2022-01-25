@@ -3,16 +3,16 @@ module Parser (parseInput) where
 import Data.Bifunctor (first)
 import Data.Functor (($>))
 import Data.Void (Void)
+import Domain
 import Text.Megaparsec
 import Text.Megaparsec.Char
-import Domain
 
 type Parser = Parsec Void String
 
 suitParser :: Parser Suit
 suitParser =
   choice
-    [ char 'C' $> Club,
+    [ char 'C' $> Clubs,
       char 'D' $> Diamonds,
       char 'H' $> Hearts,
       char 'S' $> Spades
